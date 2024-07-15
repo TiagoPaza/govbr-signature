@@ -1,0 +1,4 @@
+PdfProcessJob:
+  cron: "* * * * *"
+  class: "PdfProcessJob"
+  queue: default
