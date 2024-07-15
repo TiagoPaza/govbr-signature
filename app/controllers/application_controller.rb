@@ -56,20 +56,17 @@ class ApplicationController < ActionController::API
       font("Helvetica", size: 10).
       text("Certified by signer", at: [10, 10])
 
-    # 8_192
-    # 4_096
-    pdf_doc.sign("signed.pdf", external_signing: signing_mechanism, doc_mdp_permissions: :form_filling, signature_size: 2_048 )
+    pdf_doc.sign("signed.pdf", external_signing: signing_mechanism, doc_mdp_permissions: :form_filling, signature_size: 4_096 )
 
     sha256 = OpenSSL::Digest.new('SHA256')
     digest = sha256.digest(data)
 
-    puts "data: #{data}"
+    puts "data: #{data.bytes}"
     puts "Digest: #{digest}"
 
     base64 = Base64.encode64(digest)
-    base64 = base64.gsub(/\n/,"")
 
-    render json: { message: "PDF prepared successfully", base64: base64}, status: :ok
+    render json: { message: "PDF prepared successfully", bytes: data.bytes}, status: :ok
   end
 
   def sign_file
